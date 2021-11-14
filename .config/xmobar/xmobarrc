@@ -1,0 +1,76 @@
+Config { 
+   -- appearance
+     font =         "xft:Deja Vu Sans Mono:size=9:bold:antialias=true:hinting=true"
+   , bgColor =      "black"
+   , fgColor =      "#646464"
+   , position =     Top
+   , border =       BottomB
+   , borderColor =  "#646464"
+   , iconRoot     = "/home/tulth/.xmonad/icon/"
+   -- layout
+   , sepChar =  "%"   -- delineator between plugin names and straight text
+   , alignSep = "}{"  -- separator between left-right alignment
+   , template = "<action=`xdotool key super+Escape` button=1><icon=haskell_logo_40x28.xpm/></action> %_XMONAD_LOG_0% }{<action=`firefox -new-window https://darksky.net/forecast/34.701,-86.7423/us12/en` button=1><action=`firefox -new-window http://nginx:8001/weather/` button=3>%KHSV%</action></action> | %battery% | <action=`xfce4-terminal --hide-menubar -x htop --sort-key PERCENT_CPU` button=1>%cpu%</action> <action=`xfce4-terminal --hide-menubar --zoom -2 -x s-tui` button=1>%multicoretemp%</action> <action=`xfce4-terminal --hide-menubar -x htop --sort-key PERCENT_MEM` button=1>%memory%</action> | <action=`xfce4-terminal --hide-menubar -x sudo pacman -Syyu` button=1>%pacupdate%<icon=net_down_20.xpm/><icon=archlinux_28.xpm/></action> | <action=`firefox -new-window https://calendar.google.com/calendar` button=1>%date%</action>%_XMONAD_TRAYPAD%"
+   -- alternate weather https://openweathermap.org/city/4074277
+   -- general behavior
+   , lowerOnStart =     True    -- send to bottom of window stack on start
+   , hideOnStart =      False   -- start with window unmapped (hidden)
+   , allDesktops =      False    -- show on all desktops
+   , overrideRedirect = True    -- set the Override Redirect flag (Xlib)
+   , pickBroadest =     True   -- choose widest display (multi-monitor)
+   , persistent =       True    -- enable/disable hiding (True = disabled)
+
+   , commands = [
+          Run Cpu       [ "--template" , "<icon=cpu_28.xpm/>cpu<total>%"
+                        , "--Low"      , "45"         -- units: %
+                        , "--High"     , "85"         -- units: %
+                        , "--low"      , "darkgreen"
+                        , "--normal"   , "darkorange"
+                        , "--high"     , "darkred"
+                        , "--width"    , "3"
+                        ] 500
+
+        , Run Com "/home/tulth/.config/xmobar/weather.sh" [] "KHSV" 500
+        
+        -- network activity monitor (dynamic interface resolution)
+        , Run DynNetwork     [ "--template" , "<icon=network-icon_24.xpm/><rx>\x2193<tx>\x2191"
+                             , "--Low"      , "500000"       -- units: B/s
+                             , "--High"     , "2000000"      -- units: B/s
+                             , "--low"      , "darkgreen"
+                             , "--normal"   , "darkorange"
+                             , "--high"     , "darkred"
+                             , "--width"    , "7"
+                             , "-S"         , "True"
+                             ] 500
+
+        , Run MultiCoreTemp [ "--template"  , "<max>°C"
+                             , "--Low"      , "45"        -- units: °C
+                             , "--High"     , "80"        -- units: °C
+                             , "--low"      , "darkgreen"
+                             , "--normal"   , "darkorange"
+                             , "--high"     , "darkred"
+                             , "--width"    , "3"
+                             ] 500
+                          
+        -- memory usage monitor
+        , Run Memory         [ "--template" ,"<icon=memory-icon_24.xpm/>mem<usedratio>%"
+                             , "--Low"      , "50"        -- units: %
+                             , "--High"     , "90"        -- units: %
+                             , "--low"      , "darkgreen"
+                             , "--normal"   , "darkorange"
+                             , "--high"     , "darkred"
+                             , "--high"     , "darkred"
+                             , "--width"    , "3"
+                             ] 500
+
+        -- time and date indicator 
+        , Run Date           "<fc=#ABABAB>%F %a %R</fc>" "date" 300
+        , Run Com "/home/tulth/.config/xmobar/pacupdates.sh" [] "pacupdate" 36000
+        -- , Run Com "/home/tulth/.config/xmobar/diskuse.sh" [] "DiskU" 500
+--        , Run BatteryP ["BAT1"] ["-t", "<watts> <left>%"] 10
+        , Run Com "/home/tulth/.local/bin/power.scm" [] "battery" 150
+        , Run XPropertyLog "_XMONAD_TRAYPAD"
+        , Run XPropertyLog "_XMONAD_LOG_0"
+        ]
+   }
+
