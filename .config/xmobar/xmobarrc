@@ -10,7 +10,6 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "<action=`xdotool key super+Escape` button=1><icon=haskell_logo_40x28.xpm/></action> %_XMONAD_LOG_0% }{<action=`firefox -new-window https://darksky.net/forecast/34.701,-86.7423/us12/en` button=1><action=`firefox -new-window http://nginx:8001/weather/` button=3>%KHSV%</action></action> | %battery% | <action=`xfce4-terminal --hide-menubar -x htop --sort-key PERCENT_CPU` button=1>%cpu%</action> <action=`xfce4-terminal --hide-menubar --zoom -2 -x s-tui` button=1>%multicoretemp%</action> <action=`xfce4-terminal --hide-menubar -x htop --sort-key PERCENT_MEM` button=1>%memory%</action> | <action=`xfce4-terminal --hide-menubar -x sudo pacman -Syyu` button=1>%pacupdate%<icon=net_down_20.xpm/><icon=archlinux_28.xpm/></action> | <action=`firefox -new-window https://calendar.google.com/calendar` button=1>%date%</action>%_XMONAD_TRAYPAD%"
    -- alternate weather https://openweathermap.org/city/4074277
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -21,7 +20,7 @@ Config {
    , persistent =       True    -- enable/disable hiding (True = disabled)
 
    , commands = [
-          Run Cpu       [ "--template" , "<icon=cpu_28.xpm/>cpu<total>%"
+          Run Cpu       [ "--template" , "<action=`alacritty -e htop --sort-key PERCENT_CPU` button=1><icon=cpu_28.xpm/>cpu<total>%</action>"
                         , "--Low"      , "45"         -- units: %
                         , "--High"     , "85"         -- units: %
                         , "--low"      , "darkgreen"
@@ -53,7 +52,7 @@ Config {
                              ] 500
                           
         -- memory usage monitor
-        , Run Memory         [ "--template" ,"<icon=memory-icon_24.xpm/>mem<usedratio>%"
+        , Run Memory         [ "--template" ,"<action=`alacritty -e htop --sort-key PERCENT_MEM` button=1><icon=memory-icon_24.xpm/>mem<usedratio>%</action>"
                              , "--Low"      , "50"        -- units: %
                              , "--High"     , "90"        -- units: %
                              , "--low"      , "darkgreen"
@@ -72,5 +71,16 @@ Config {
         , Run XPropertyLog "_XMONAD_TRAYPAD"
         , Run XPropertyLog "_XMONAD_LOG_0"
         ]
+       , template = "<action=`xdotool key super+Escape` button=1><icon=haskell_logo_40x28.xpm/></action>\
+            \ %_XMONAD_LOG_0% }{\
+            \<action=`firefox -new-window https://darksky.net/forecast/34.701,-86.7423/us12/en` button=1>\
+            \<action=`firefox -new-window http://nginx:8001/weather/` button=3>%KHSV%</action></action>\
+            \ | %battery%\
+            \ | %cpu%\
+            \<action=`alacritty -o font.size=8 -e s-tui` button=1>%multicoretemp%</action>\
+            \ %memory%\
+            \ | <action=`alacritty -e sudo pacman -Syyu` button=1>%pacupdate%<icon=net_down_20.xpm/><icon=archlinux_28.xpm/></action>\
+            \ | <action=`firefox -new-window https://calendar.google.com/calendar` button=1>%date%</action>\
+            \%_XMONAD_TRAYPAD%" }
    }
 
