@@ -130,11 +130,10 @@ myTabConfig =  TAB.def { TAB.fontName = myFontSmall
                        }
                
 myLayout = toggleLayouts (named "Full" (noBorders Full)) (
-  avoidStruts ( named "tabbed" $ tabbed shrinkText myTabConfig
-                ||| named "tiled" tiled
-                ||| named "mirrorTiled" (Mirror tiled)
-                ||| named "almostFull" Full))
-
+  avoidStruts ( named "tabbed" (tabbed shrinkText myTabConfig)
+            ||| named "tiled" tiled
+            ||| named "mirrorTiled" (Mirror tiled)
+            ||| named "almostFull" Full))
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled = mySpacing 3 $ Tall nmaster delta ratio
