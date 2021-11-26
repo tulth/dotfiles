@@ -212,8 +212,7 @@ myTsConfig = TS.def { TS.ts_node_height = 60
                     }
 
 myStartMenu = TS.treeselectAction myTsConfig
-   [ Node (TS.TSNode "Launcher" "Xfce4 App Launcher" (spawn "xfce4-appfinder")) []
-   , Node (TS.TSNode "Emacs" "Launch emacs client" (spawn "emacsclient -c -a emacs")) []
+   [ Node (TS.TSNode "Emacs" "Launch emacs client" (spawn "emacsclient -c -a emacs")) []
    , Node (TS.TSNode "Xmobar Overview" "Displays help on xmobar fields" (spawn "xdg-open /home/tulth/.config/xmobar/xmobar_diagram.pdf")) []
    , Node (TS.TSNode "Key Bindings" "Show Key Bindings" (spawn "xmessage -default okay -file ~/.xmonad/xmonad_keys.txt")) []
    , Node (TS.TSNode "Logout" "Log out of the Xmonad session" exitXmonadAction) []
